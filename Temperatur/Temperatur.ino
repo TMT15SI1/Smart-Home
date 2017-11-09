@@ -14,8 +14,9 @@ void loop() {
   int sensorVal = analogRead(sensorPin);
   float volt = (sensorVal/1024.0)*5.0;
   int temp = map(sensorVal, 0, 1024, -50, 450);
+  //int humid = ;
   //float temp = (volt-0.5)*100;
-
+  /*
   werte[i] = temp;
   i = i+1;
   if (i >= 21) {
@@ -28,13 +29,13 @@ void loop() {
     summe = summe+werte[j];  
   }
   int avg = summe/20;
-
+  */
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(temp);
-  lcd.print(" C now");
+  lcd.print(" C");
   lcd.setCursor(0, 1);
-  lcd.print(avg);
-  lcd.print(" C avg ");
-  delay(250);
+  lcd.print(humid);
+  lcd.print(" %");
+  delay(1000);
 }
