@@ -11,8 +11,10 @@ int werte[21];
 int i = 0;
 */
 void setup() {
-  lcd.begin(16,2);
+   lcd.begin(16,2);
   lcd.print("Initializing");
+
+  myHumidity.begin();
 }
 
 void loop() {
@@ -45,5 +47,5 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print(humd);
   lcd.print(" %");
-  delay(1500);
-}
+ delay(500);
+ }
