@@ -2,7 +2,7 @@
 // PSWD muss gleich sein, ROLE muss 0 sein (Slave),
 #include <SoftwareSerial.h>
 SoftwareSerial BTSerial(10, 11); // RX | TX
-#define timer 50
+#define timer 40
 //PINS für HEIZKÖRPERTHERMOSTAT: "MASSE" D9,links neben "MASSE" D3, ganz links A3.
 bool state = false;
 int hiLo;
@@ -12,21 +12,21 @@ void setup()
   //pinMode(Y,INPUT);           //Für Humidity
   pinMode(12, OUTPUT);
   pinMode(13, OUTPUT);
-  pinMode(3,INPUT_PULLUP);
+  pinMode(3, INPUT_PULLUP);
   hiLo = analogRead(3);
   int loHi = analogRead(9);
   delay(50);
   if (hiLo >= 800)
   {
     state = true;
-    analogWrite(3,153);
-    analogWrite(A3,153);
+    analogWrite(3, 153);
+    analogWrite(A3, 153);
   }
   else
   {
-    analogWrite(3,LOW);
-    analogWrite(9,LOW);    
-    analogWrite(A3,LOW);    
+    analogWrite(3, LOW);
+    analogWrite(9, LOW);
+    analogWrite(A3, LOW);
   }
   BTSerial.begin(38400);
   Serial.begin(9600);
@@ -114,55 +114,42 @@ void KLIMA() {
 }
 void HEIZUNG(int temperatur)
 {
-  for (int i = 1; i <= 100; i++) //Egal wie hoch die Temperatur ist, erstmal auf 5°C setzen und dann
+  for (int i = 1; i <= 50; i++) //Egal wie hoch die Temperatur ist, erstmal auf 5°C setzen und dann
   {
-    if (state == true)
-    {
-      state = false;
-      analogWrite(3, LOW);
-      delay(timer);
-      digitalWrite(A3, LOW);
-      delay(timer);
-      Serial.println("LOW");
-    }
-    else if (state == false)
-    {
-      state = true;
-      analogWrite(3, 153);
-      delay(timer);
-      analogWrite(A3, 153);
-      delay(timer);
-      Serial.println("HIGH");
-    }
+
+    analogWrite(3, LOW);
+    delay(timer);
+    digitalWrite(A3, LOW);
+    delay(timer);
+    Serial.println("LOW");
+
+    analogWrite(3, 153);
+    delay(timer);
+    analogWrite(A3, 153);
+    delay(timer);
+    Serial.println("HIGH");
   }
   Serial.println("Auf 5 gesetzt");
-  analogWrite(3,153);
-  for (int j = 0; j <= (temperatur - 5) * 4; j++)
+  analogWrite(3, 153);
+  for (int j = 1; j <= (temperatur - 5) * 2; j++)
   {
     Serial.println(j);
-    if (state == true)
-    {
-      state = false;
-      analogWrite(9, LOW);
-      delay(timer);
-      analogWrite(3, LOW);
-      delay(timer);
-      Serial.println("HIGH2");
 
-    }
-    else if (state == false)
-    {
-      state = true;
-      analogWrite(9, 153);
-      delay(timer);
-      analogWrite(3, 153);
-      delay(timer);
-      Serial.println("LOW2");
-    }
+    analogWrite(9, LOW);
+    delay(timer);
+    analogWrite(3, LOW);
+    delay(timer);
+    Serial.println("LOW2");
+
+    analogWrite(9, 153);
+    delay(timer);
+    analogWrite(3, 153);
+    delay(timer);
+    Serial.println("HIGH2");
   }
-  analogWrite(3,153);
-  analogWrite(9,153);
-  analogWrite(A3,153);
+  analogWrite(3, 153);
+  analogWrite(9, 153);
+  analogWrite(A3, 153);
   Serial.print("Auf ");
   Serial.print(temperatur);
   Serial.print(" °C gesetzt");
@@ -171,5 +158,3 @@ void HEIZUNG(int temperatur)
     int Puffer = BTSerial.read();
   }
 }
-
-
